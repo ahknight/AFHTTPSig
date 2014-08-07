@@ -1,0 +1,3 @@
+target 'AFHTTPSig', :exclusive => true do
+  pod "AFHTTPSig", :path => "../"
+end

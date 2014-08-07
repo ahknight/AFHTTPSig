@@ -1,0 +1,14 @@
+PODS:
+  - AFHTTPSig (1.0.0)
+
+DEPENDENCIES:
+  - AFHTTPSig (from `../`)
+
+EXTERNAL SOURCES:
+  AFHTTPSig:
+    :path: ../
+
+SPEC CHECKSUMS:
+  AFHTTPSig: 344196a03c88cd14ab9b4d7f25c068db7818ae24
+
+COCOAPODS: 0.33.1
