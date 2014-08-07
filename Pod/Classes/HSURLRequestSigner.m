@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Adam Knight. All rights reserved.
 //
 
-#import "HSURLRequestSigner.h"
-#import "NSDate+NSDateRFC1123.h"
+#import <AFHTTPSig/HSURLRequestSigner.h>
+#import <AFHTTPSig/NSDate+NSDateRFC1123.h>
 #import <CocoaSecurity.h>
 
 

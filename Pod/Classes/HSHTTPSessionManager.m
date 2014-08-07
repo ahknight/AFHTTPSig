@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Adam Knight. All rights reserved.
 //
 
-#import "HSHTTPSessionManager.h"
-#import "HSURLRequestSigner.h"
+#import <AFHTTPSig/HSHTTPSessionManager.h>
+#import <AFHTTPSig/HSURLRequestSigner.h>
 
 @implementation HSHTTPSessionManager
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Adam Knight. All rights reserved.
 //
 
-#import "AFHTTPSessionManager.h"
+#import <AFNetworking/AFHTTPSessionManager.h>
 #import "HSURLRequestSigner.h"
 
 @interface HSHTTPSessionManager : AFHTTPSessionManager
