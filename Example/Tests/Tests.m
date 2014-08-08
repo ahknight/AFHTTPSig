@@ -7,8 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <AFHTTPSig/HSURLRequestSigner.h>
-#import <AFHTTPSig/HSHTTPSessionManager.h>
+#import <AFHTTPSig/AFHTTPSig.h>
 
 #include <unistd.h>
 #include <stdio.h>

@@ -23,7 +23,6 @@ Pod::Spec.new do |s|
 	s.requires_arc = true
 
 	s.source_files = 'Pod/Classes'
-	s.resources = 'Pod/Assets/*.png'
 
 	s.dependency 'AFNetworking', '~> 2.3'
 	s.dependency 'CocoaSecurity', '~> 1.2'

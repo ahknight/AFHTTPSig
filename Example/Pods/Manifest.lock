@@ -33,7 +33,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AFHTTPSig: 0e5fc9bdb1dd1b03942d6b011e80da304a9eb359
+  AFHTTPSig: dd2b1efb78be1e20a30f99b3ba87f0412c1fe057
   AFNetworking: 6d7b76aa5d04c8c37daad3eef4b7e3f2a7620da3
   CocoaSecurity: 7ce1b967863d4e96dcffdbad17671117900e6c6e
 
