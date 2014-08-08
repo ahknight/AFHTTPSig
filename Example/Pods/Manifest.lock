@@ -1,7 +1,6 @@
 PODS:
-  - AFHTTPSig (1.0.0):
+  - AFHTTPSig (1.0.1):
     - AFNetworking (~> 2.3)
-    - CocoaSecurity (~> 1.2)
   - AFNetworking (2.3.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
@@ -23,7 +22,6 @@ PODS:
   - AFNetworking/UIKit (2.3.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - CocoaSecurity (1.2.4)
 
 DEPENDENCIES:
   - AFHTTPSig (from `../`)
@@ -33,8 +31,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AFHTTPSig: dd2b1efb78be1e20a30f99b3ba87f0412c1fe057
+  AFHTTPSig: 6344412c7ac642a13f7025d4e2d5077499ff68f8
   AFNetworking: 6d7b76aa5d04c8c37daad3eef4b7e3f2a7620da3
-  CocoaSecurity: 7ce1b967863d4e96dcffdbad17671117900e6c6e
 
 COCOAPODS: 0.33.1

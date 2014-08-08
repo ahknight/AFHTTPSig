@@ -91,6 +91,8 @@ int check_port(char* host, unsigned port)
 	if (check_port("127.0.0.1", 8000) != 0) {
 		NSLog(@"Skipping test: server not available.");
 		return;
+	} else {
+		NSLog(@"Test server is up -- proceeding.");
 	}
 	
 	NSURL* baseURL = [NSURL URLWithString:@"http://127.0.0.1:8000/"];
@@ -106,20 +108,20 @@ int check_port(char* host, unsigned port)
 	responseSerializer.acceptableStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 1000)];
 	session.responseSerializer = responseSerializer;
 	
-	[session GET:@"/users/"
-	       parameters:@{ @"foo": @"bar", @"baz": @"luhrman" }
-	          success: ^(NSURLSessionDataTask *task, id responseObject) {
-				  if (responseObject && [responseObject isKindOfClass:[NSData class]]) {
-					  NSLog(@"%@", [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding]);
-				  } else {
-					  NSLog(@"%@", responseObject);
-				  }
-			  }
-	 
-	          failure: ^(NSURLSessionDataTask *task, NSError *error) {
-				  NSLog(@"%@", error);
-			  }];
+	NSURLSessionDataTask *task = [session GET:@"/users/"
+								   parameters:@{ @"foo": @"bar", @"baz": @"luhrman" }
+									  success: nil
+									  failure: nil];
+	
+	// Wait for the task to stop running.
+	while ([task state] == NSURLSessionTaskStateRunning) sleep(0.1);
+	
+	// Ensure it was marked complete and not cancelled, etc.
+	XCTAssertEqual([task state], NSURLSessionTaskStateCompleted, @"Task was not completed.");
 
+	// Test the HTTP status.
+	NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
+	XCTAssertEqual(response.statusCode, 200, @"Call failed: %@", response);
 }
 
 @end

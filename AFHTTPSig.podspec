@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
 	s.name             = "AFHTTPSig"
-	s.version          = "1.0.1"
+	s.version          = "1.0.2"
 	s.summary          = "Automatic HTTPSig request signing for AFNetworking."
 	s.description      = <<-DESC
 Includes a session manager (which you can use as a base class for your own session manager) that signs outgoing requests according to the IETF HTTP Signature draft specification.
@@ -25,5 +25,4 @@ DESC
 	s.source_files = 'Pod/Classes'
 
 	s.dependency 'AFNetworking', '~> 2.3'
-	s.dependency 'CocoaSecurity', '~> 1.2'
 end

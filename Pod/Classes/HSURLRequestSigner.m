@@ -8,7 +8,7 @@
 
 #import <AFHTTPSig/HSURLRequestSigner.h>
 #import <AFHTTPSig/NSDate+NSDateRFC1123.h>
-#import <CocoaSecurity.h>
+#import <AFHTTPSig/HSCrypto.h>
 
 
 NSString *HSErrorDomain     = @"HTTPSIG";
@@ -87,7 +87,8 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 				return nil;
 			}
 			
-			value = [CocoaSecurity sha256WithData:rndData].base64;
+			value = [[HSCrypto SHA256Data:rndData] base64EncodedStringWithOptions:0];
+			
 			[mutableRequest setValue:value forHTTPHeaderField:@"X-Nonce"];
 			
 		} else {
@@ -109,7 +110,7 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 	}
 	
 #ifdef DEBUG
-	NSLog(@"%@", [mutableRequest allHTTPHeaderFields]);
+//	NSLog(@"%@", [mutableRequest allHTTPHeaderFields]);
 #endif
 	
 	// HMAC message
@@ -117,13 +118,19 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 	NSString *signature = nil;
 	
 	if ([algorithm isEqualToString:HSAlgoHmacSha256]) {
-		signature = [CocoaSecurity hmacSha256:message hmacKey:secret].base64;
+		signature = [[HSCrypto HMACData:[message dataUsingEncoding:NSUTF8StringEncoding]
+									key:[secret dataUsingEncoding:NSUTF8StringEncoding]
+							  algorithm:kCCHmacAlgSHA256] base64EncodedStringWithOptions:0];
 		
 	} else if ([algorithm isEqualToString:HSAlgoHmacSha512]) {
-		signature = [CocoaSecurity hmacSha512:message hmacKey:secret].base64;
+		signature = [[HSCrypto HMACData:[message dataUsingEncoding:NSUTF8StringEncoding]
+									key:[secret dataUsingEncoding:NSUTF8StringEncoding]
+							  algorithm:kCCHmacAlgSHA512] base64EncodedStringWithOptions:0];
 		
 	} else if ([algorithm isEqualToString:HSAlgoHmacSha1]) {
-		signature = [CocoaSecurity hmacSha1:message hmacKey:secret].base64;
+		signature = [[HSCrypto HMACData:[message dataUsingEncoding:NSUTF8StringEncoding]
+									key:[secret dataUsingEncoding:NSUTF8StringEncoding]
+							  algorithm:kCCHmacAlgSHA1] base64EncodedStringWithOptions:0];
 		
 	} else {
 		if (error != NULL)
@@ -134,8 +141,8 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 	}
 	
 #ifdef DEBUG
-	NSLog(@"Message: %@", message);
-	NSLog(@"Signature: %@", signature);
+//	NSLog(@"Message: %@", message);
+//	NSLog(@"Signature: %@", signature);
 #endif
 	
 	// Create and add header
@@ -150,7 +157,7 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 	[mutableRequest setValue:authValue forHTTPHeaderField:@"Authorization"];
 	
 #ifdef DEBUG
-	NSLog(@"Authorization: %@", authValue);
+//	NSLog(@"Authorization: %@", authValue);
 #endif
 	
 	return [mutableRequest copy];
