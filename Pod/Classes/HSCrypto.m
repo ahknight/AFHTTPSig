@@ -58,7 +58,7 @@
 {
 	unsigned digestLength = CC_SHA256_DIGEST_LENGTH;
 	uint8_t *digest = calloc(digestLength, 1);
-	digest = CC_SHA256([data bytes], [data length], digest);
+	CC_SHA256([data bytes], (CC_LONG)[data length], digest);
 	return [NSData dataWithBytesNoCopy:digest length:digestLength freeWhenDone:YES];
 }
 
