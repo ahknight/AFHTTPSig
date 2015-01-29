@@ -18,6 +18,7 @@
 /* Begin PBXFileReference section */
 		06EE92B0BB514A3D8A384A0D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		1021E982B2B44E538961777F /* AFHTTPSig.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AFHTTPSig.podspec; path = ../AFHTTPSig.podspec; sourceTree = "<group>"; };
+		4C55B20B7E2654DB0A1E8E8C /* Pods-AFHTTPSig.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFHTTPSig.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AFHTTPSig/Pods-AFHTTPSig.debug.xcconfig"; sourceTree = "<group>"; };
 		533722B127CD495DB9F24A37 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* AFHTTPSig.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AFHTTPSig.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -30,7 +31,7 @@
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		71BAC5A6EF8D45E58B2B0B01 /* libPods-AFHTTPSig.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFHTTPSig.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		908D8057885D4B35832D2880 /* Pods-AFHTTPSig.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFHTTPSig.xcconfig"; path = "Pods/Pods-AFHTTPSig.xcconfig"; sourceTree = "<group>"; };
+		C27AB3D7F274321EA3150E12 /* Pods-AFHTTPSig.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFHTTPSig.release.xcconfig"; path = "Pods/Target Support Files/Pods-AFHTTPSig/Pods-AFHTTPSig.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +56,7 @@
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				908D8057885D4B35832D2880 /* Pods-AFHTTPSig.xcconfig */,
+				A7CD5120274F4493BB0DC0D5 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,6 +108,15 @@
 				06EE92B0BB514A3D8A384A0D /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		A7CD5120274F4493BB0DC0D5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4C55B20B7E2654DB0A1E8E8C /* Pods-AFHTTPSig.debug.xcconfig */,
+				C27AB3D7F274321EA3150E12 /* Pods-AFHTTPSig.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -188,7 +198,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-AFHTTPSig-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AFHTTPSig/Pods-AFHTTPSig-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D6BE1C350FEB4849B658B3F9 /* Check Pods Manifest.lock */ = {
@@ -305,7 +315,7 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 908D8057885D4B35832D2880 /* Pods-AFHTTPSig.xcconfig */;
+			baseConfigurationReference = 4C55B20B7E2654DB0A1E8E8C /* Pods-AFHTTPSig.debug.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -327,7 +337,7 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 908D8057885D4B35832D2880 /* Pods-AFHTTPSig.xcconfig */;
+			baseConfigurationReference = C27AB3D7F274321EA3150E12 /* Pods-AFHTTPSig.release.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
