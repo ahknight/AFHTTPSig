@@ -14,7 +14,7 @@
 NSString *HSErrorDomain     = @"HTTPSIG";
 //NSString *HSAlgoRsaSha1     = @"rsa-sha1";
 //NSString *HSAlgoRsaSha256   = @"rsa-sha256";
-NSString *HSAlgoHmacSha1	= @"hmac-sha1";
+NSString *HSAlgoHmacSha1    = @"hmac-sha1";
 NSString *HSAlgoHmacSha256  = @"hmac-sha256";
 NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 
@@ -39,45 +39,46 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 			*error = [NSError errorWithDomain:HSErrorDomain code:-1 userInfo:@{ NSLocalizedDescriptionKey: @"secret not set" }];
 		return nil;
 	}
-	
+
 	NSMutableURLRequest *mutableRequest = [request mutableCopy];
-	
+
 	// Build message
 	NSMutableArray *messageLines = [NSMutableArray new];
 	NSDictionary *requestHeaders = [mutableRequest allHTTPHeaderFields];
-	
+
 	for (NSString *header in signHeaders) {
 		NSString *value = nil;
-		
-		if ([header isEqualToString:@"(request-line)"]) {
+
+		// Drafts 1 and 2 use request-line, drafts 3 and 4 use request-target. They are the same thing.
+		if ([header isEqualToString:@"(request-line)"] || [header isEqualToString:@"(request-target)"]) {
 			/*
 			 We need the portion of the URL after the host EXACTLY as it will be sent. Therefore, we search for the path in the URL and then grab everything after. This ensures we get things like the fragment and query args in exactly the same order they will be sent to the server.
 			 */
 			NSURL *url = mutableRequest.URL;
 			NSString *urlString = [url absoluteString];
 			NSString *requestPath = nil;
-			
+
 			NSRange range = [urlString rangeOfString:url.path options:NSCaseInsensitiveSearch];
 			if (range.location == NSNotFound) return nil;
 			range = NSMakeRange(range.location, urlString.length - range.location);
 			requestPath = [urlString substringWithRange:range];
-			
+
 			value = [NSString stringWithFormat:@"%@ %@", mutableRequest.HTTPMethod.lowercaseString, requestPath];
-			
+
 		} else if ([header isEqualToString:@"date"]) {
 			value = [[NSDate date] rfc1123String];
 			[mutableRequest setValue:value forHTTPHeaderField:@"Date"];
-			
+
 		} else if ([header isEqualToString:@"x-nonce"]) {
 			// Optional. Include X-Nonce as a header to activate.
 			// Ensures that if two identical requests are sent in the same second that the sig is different.
 			// Also, with server support, prevents replay attacks for the duration of the date/time window.
-			
+
 			// rndData takes ownership of the rnd allocation and frees it when it is released.
 			const NSUInteger dataLen = 1024;
 			uint8_t* rnd = calloc(dataLen, sizeof(uint8_t));
 			NSData *rndData = [NSData dataWithBytesNoCopy:rnd length:dataLen freeWhenDone:YES];
-			
+
 			if (SecRandomCopyBytes(NULL, dataLen, rnd)) {
 				//fail
 				if (error != NULL)
@@ -86,11 +87,11 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 					                         userInfo:@{ NSLocalizedDescriptionKey: @"SecRandomCopyBytes failed" }];
 				return nil;
 			}
-			
+
 			value = [[HSCrypto SHA256Data:rndData] base64EncodedStringWithOptions:0];
-			
+
 			[mutableRequest setValue:value forHTTPHeaderField:@"X-Nonce"];
-			
+
 		} else {
 			value = [requestHeaders objectForKey:header];
 			if (value == nil) {
@@ -98,40 +99,40 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 					*error = [NSError errorWithDomain:HSErrorDomain
 					                             code:-1
 					                         userInfo:@{
-														NSLocalizedDescriptionKey: @"Missing required header.",
-														NSLocalizedFailureReasonErrorKey: header
-														}
-							  ];
+					              NSLocalizedDescriptionKey: @"Missing required header.",
+					              NSLocalizedFailureReasonErrorKey: header
+							  }
+					         ];
 				return nil;
 			}
 		}
-		
+
 		[messageLines addObject:[NSString stringWithFormat:@"%@: %@", [header lowercaseString], value]];
 	}
-	
+
 #ifdef DEBUG
 //	NSLog(@"%@", [mutableRequest allHTTPHeaderFields]);
 #endif
-	
+
 	// HMAC message
 	NSString *message = [messageLines componentsJoinedByString:@"\n"];
 	NSString *signature = nil;
-	
+
 	if ([algorithm isEqualToString:HSAlgoHmacSha256]) {
 		signature = [[HSCrypto HMACData:[message dataUsingEncoding:NSUTF8StringEncoding]
-									key:[secret dataUsingEncoding:NSUTF8StringEncoding]
-							  algorithm:kCCHmacAlgSHA256] base64EncodedStringWithOptions:0];
-		
+		                            key:[secret dataUsingEncoding:NSUTF8StringEncoding]
+		                      algorithm:kCCHmacAlgSHA256] base64EncodedStringWithOptions:0];
+
 	} else if ([algorithm isEqualToString:HSAlgoHmacSha512]) {
 		signature = [[HSCrypto HMACData:[message dataUsingEncoding:NSUTF8StringEncoding]
-									key:[secret dataUsingEncoding:NSUTF8StringEncoding]
-							  algorithm:kCCHmacAlgSHA512] base64EncodedStringWithOptions:0];
-		
+		                            key:[secret dataUsingEncoding:NSUTF8StringEncoding]
+		                      algorithm:kCCHmacAlgSHA512] base64EncodedStringWithOptions:0];
+
 	} else if ([algorithm isEqualToString:HSAlgoHmacSha1]) {
 		signature = [[HSCrypto HMACData:[message dataUsingEncoding:NSUTF8StringEncoding]
-									key:[secret dataUsingEncoding:NSUTF8StringEncoding]
-							  algorithm:kCCHmacAlgSHA1] base64EncodedStringWithOptions:0];
-		
+		                            key:[secret dataUsingEncoding:NSUTF8StringEncoding]
+		                      algorithm:kCCHmacAlgSHA1] base64EncodedStringWithOptions:0];
+
 	} else {
 		if (error != NULL)
 			*error = [NSError errorWithDomain:HSErrorDomain
@@ -139,12 +140,12 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 			                         userInfo:@{ NSLocalizedDescriptionKey: @"Unsupported algorithm." }];
 		return nil;
 	}
-	
+
 #ifdef DEBUG
 //	NSLog(@"Message: %@", message);
 //	NSLog(@"Signature: %@", signature);
 #endif
-	
+
 	// Create and add header
 	NSString *authValue = [NSString stringWithFormat:
 	                       @"Signature keyId=\"%@\",algorithm=\"%@\",signature=\"%@\",headers=\"%@\"",
@@ -152,14 +153,14 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 	                       algorithm,
 	                       signature,
 	                       [signHeaders componentsJoinedByString:@" "]
-						   ];
-	
+	                      ];
+
 	[mutableRequest setValue:authValue forHTTPHeaderField:@"Authorization"];
-	
+
 #ifdef DEBUG
 //	NSLog(@"Authorization: %@", authValue);
 #endif
-	
+
 	return [mutableRequest copy];
 }
 
@@ -168,13 +169,13 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 	if ((self = [super init])) {
 		self.keyID = keyID;
 		self.secret = secret;
-		
+
 		if (algorithm) {
 			self.algorithm = algorithm;
 		} else {
 			self.algorithm = HSAlgoHmacSha256;
 		}
-		
+
 		if (signHeaders) {
 			self.signHeaders = signHeaders;
 		} else {
@@ -192,9 +193,9 @@ NSString *HSAlgoHmacSha512  = @"hmac-sha512";
 	                                            withKeyID:self.keyID
 	                                            andSecret:self.secret
 	                                            algorithm:self.algorithm
-	                                                error:& outError];
+	                                                error:&outError];
 	if (error != nil) *error = outError;
-	
+
 	return signedRequest;
 }
 
